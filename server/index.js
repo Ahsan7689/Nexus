@@ -11,7 +11,10 @@ const app = express()
 // ── Security & middleware ───────────────────────────────────────────
 app.use(helmet())
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'https://nimra-project.netlify.app',
+  origin: [
+    'http://localhost:5173',
+    'https://nimra-project.netlify.app',
+  ],
   credentials: true,
 }))
 app.use(morgan('dev'))
