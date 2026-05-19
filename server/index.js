@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: 200,
   message: { message: 'Too many requests, please try again later.' },
 })
@@ -48,18 +48,17 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ message: err.message || 'Internal server error' })
 })
 
-// ── Database & Start ───────────────────────────────────────────────
+// ── Database Connection ───────────────────────────────────────────
+// ⚠️ Vercel ke liye listen() hata diya — module.exports se kaam chalta hai
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('✅  MongoDB connected'))
+  .catch(err => console.error('❌  MongoDB connection error:', err.message))
+
+// ── Local development ke liye ─────────────────────────────────────
 const PORT = process.env.PORT || 5000
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => console.log(`🚀  Server running on http://localhost:${PORT}`))
+}
 
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('✅  MongoDB connected')
-    app.listen(PORT, () => console.log(`🚀  Server running on http://localhost:${PORT}`))
-  })
-  .catch(err => {
-    console.error('❌  MongoDB connection error:', err.message)
-    process.exit(1)
-  })
-
-module.exports = app; 
+// ⬅️ YE ZAROORI HAI — Vercel is line se app ko pick karta hai
+module.exports = app
