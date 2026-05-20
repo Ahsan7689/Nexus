@@ -13,12 +13,11 @@ app.use(helmet())
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://nimra-project.netlify.app',
-    // ⚠️ Apni actual Netlify URL bhi daalo agar alag hai
+    'https://nimra-project.netlify.app'
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }))
 app.use(morgan('dev'))
 
