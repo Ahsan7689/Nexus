@@ -12,17 +12,18 @@ const app = express()
 app.use(helmet())
 
 app.use(cors({
+  app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://nimra-project.netlify.app'
+    'https://nimra-project.netlify.app',
+    'https://nexus-client.vercel.app', // ⬅️ Vercel frontend URL
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }))
 
-// OPTIONS preflight handle karo
-app.options('*', cors())
+app.options('*', cors()) // preflight
 
 app.use(morgan('dev'))
 
